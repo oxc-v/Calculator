@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/myStyle">
+        <file>pushButtonStyle.qss</file>
+    </qresource>
+</RCC>

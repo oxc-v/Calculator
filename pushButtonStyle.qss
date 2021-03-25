@@ -1,0 +1,64 @@
+QWidget {
+    background-color: white;
+}
+
+.QPushButton {
+    border-radius: 100px;
+    width: 200px;
+    height: 200px;
+}
+.QPushButton:pressed  {
+    background-color: #ad98d7;
+
+}
+QPushButton#btnDivide, QPushButton#btnMultiply, QPushButton#btnSubtract, 
+QPushButton#btnAdd, QPushButton#btnNegative, QPushButton#btnRight,
+QPushButton#btnLeft {
+    color: #3aba95;
+}
+QPushButton#btnEqual {
+    background-color:  #ad98d7;
+    color: white;
+}
+QPushButton#btnEqual:pressed,  QPushButton#btnHistory:pressed, QPushButton#btnGoBack:pressed,
+QPushButton#btnBack:pressed {
+    background-color: #71ab97;
+}
+QPushButton#btnBack, QPushButton#btnClear {
+    color: #d66d75;
+}
+QPushButton#btnClearData {
+    background-color: #ad98d7;
+    color: white;
+    border-radius: 25px;
+}
+QPushButton#btnClearData:pressed  {
+    background-color: #71ab97;
+}
+
+.QLineEdit {
+    border: none;
+}
+QLineEdit#lineOutput {
+    color: #71ab97;
+}
+QLineEdit#lineEdit {
+    color: #ad98d7;
+    margin-top: 400px;
+}
+
+.QListView {
+    color: #eda9b8;
+    border: none;
+    background-color: #fafafc;
+}
+
+QListView::item {
+    border-bottom: 1px solid #71ab97;
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.QLabel {
+    color: #8698b7;
+}
