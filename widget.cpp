@@ -1,7 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
 #include "calculate.h"
-#include "historywidget.h"
 
 #include <QFile>
 
@@ -11,9 +10,14 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // 创建历史记录窗口
-    hw = new historyWidget;
+    // 显示计算页面
+    ui->stackedWidget->setCurrentIndex(0);
 
+    // 设置图标大小
+#ifdef Q_OS_ANDROID
+    ui->btnHistory->setIconSize(QSize(128, 128));
+    ui->btnBack->setIconSize(QSize(128, 128));
+#endif
     // 加载qss样式表
     QFile file(":/myStyle/pushButtonStyle.qss");
     file.open(QFile::ReadOnly);
@@ -40,14 +44,11 @@ Widget::Widget(QWidget *parent)
     connect(ui->btnPoint, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
     connect(ui->btnPrecent, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
     connect(ui->lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(resultDisplay(const QString &)));
-    connect(hw, SIGNAL(clearData()), this, SLOT(clearHistory()));
-    connect(hw, SIGNAL(closeHistoryWidget()), this, SLOT(showWidget()));
 }
 
 Widget::~Widget()
 {
     delete ui;
-    delete hw;
 }
 
 // 显示按钮text
@@ -89,9 +90,11 @@ void Widget::on_btnEqual_pressed()
         // 此时lineEdit显示的是运算结果
         isResult = true;
 
-        // 将表达式和结果放入历史记录列表中
-        historyList << ui->lineEdit->text() + "=" + QString::number(ca.result);
-        hw->setStringList(historyList);
+        // 显示历史记录
+        QString str = ui->lineEdit->text() + "\n" + "="+ QString::number(ca.result);
+        QListWidgetItem *newItem = new QListWidgetItem(str);
+        newItem->setTextAlignment(Qt::AlignRight);
+        ui->listWidget->addItem(newItem);
 
         // 清除lineEdit的内容并显示表达式的值
         ui->lineEdit->clear();
@@ -168,12 +171,53 @@ void Widget::on_btnNegative_pressed()    // 有bug
     ui->lineEdit->setText(str);
 }
 
-// 跳转到历史记录窗口
+// 显示历史记录界面
 void Widget::on_btnHistory_pressed()
 {
-    // 显示历史记录窗口并隐藏主窗口
-    hw->show();
-    this->hide();
+    // 获取当前页面索引
+    int index = ui->stackedWidget->currentIndex();
+
+    // 切换页面和图标
+    if (index == 0) {
+        ui->btnHistory->setIcon(QIcon("://android_sources/images/goBack.png"));
+        ui->stackedWidget->setCurrentIndex(1);
+    }
+    else {
+        ui->btnHistory->setIcon(QIcon(":/btnIcon/android_sources/images/history.png"));
+        ui->stackedWidget->setCurrentIndex(0);
+    }
+}
+
+// 点击历史记录条项
+void Widget::on_listWidget_itemPressed(QListWidgetItem *item)
+{
+    // 提取运算结果
+    QString str = item->text();
+    QStringList list = str.split("=");
+    str = list.at(list.size() - 1);
+
+    // 如果结果是负数，则为结果添加()
+    bool ok = false;
+    double result = str.toDouble(&ok);
+    if (ok && result < 0) {
+        str.insert(0, '(');
+        str.insert(str.size(), ')');
+    }
+
+    if (isResult) {
+        ui->lineEdit->setText(str);
+        isResult = false;
+    } else {
+        ui->lineEdit->insert(str);
+    }
+
+    ui->listWidget->clearSelection();
+}
+
+// 清除历史记录
+void Widget::on_btnClearData_pressed()
+{
+    ui->listWidget->clear();
 }
 
 // 实时显示表达式结果
@@ -194,20 +238,5 @@ void Widget::resultDisplay(const QString &text)
             ui->lineOutput->setText(QString::number(tmp.result));
         }
     }
-}
-
-// 显示主窗口
-void Widget::showWidget()
-{
-    // 隐藏历史记录窗口并显示主窗口
-    hw->hide();
-    this->show();
-}
-
-// 清除历史记录
-void Widget::clearHistory()
-{
-    historyList.clear();
-    hw->setStringList(historyList);
 }
 

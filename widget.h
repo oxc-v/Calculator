@@ -7,7 +7,7 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
 
-class historyWidget;
+class QListWidgetItem;
 
 class Widget : public QWidget
 {
@@ -34,25 +34,22 @@ private slots:
     // 设置正负
     void on_btnNegative_pressed();
 
-    // 跳转到历史记录窗口
+    // 显示历史记录界面
     void on_btnHistory_pressed();
+
+    // 点击历史记录条项
+    void on_listWidget_itemPressed(QListWidgetItem *item);
+
+    // 清除历史记录
+    void on_btnClearData_pressed();
 
     // 实时显示表达式结果
     void resultDisplay(const QString &text);
-
-    // 显示主窗口
-    void showWidget();
-
-    // 清除历史记录
-    void clearHistory();
 
 private:
     Ui::Widget *ui;
 
 private:
-
-    historyWidget *hw;          // 历史记录窗口
-    QStringList historyList;    // 存放多个表达式
 
     bool isResult = false;      // 判断lineEdit显示的内容是否为表达式求值结果
 };

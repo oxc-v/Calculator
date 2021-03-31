@@ -4,7 +4,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
 
-android: QT += androidextras
+lessThan(QT_VERSION, 6): QT += androidextras
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -12,17 +12,14 @@ android: QT += androidextras
 
 SOURCES += \
     calculate.cpp \
-    historywidget.cpp \
     main.cpp \
     widget.cpp
 
 HEADERS += \
     calculate.h \
-    historywidget.h \
     widget.h
 
 FORMS += \
-    historywidget.ui \
     widget.ui
 
 # Default rules for deployment.
