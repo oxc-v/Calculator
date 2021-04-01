@@ -23,25 +23,25 @@ private slots:
     void on_btnClicked();
 
     // 计算表达式
-    void on_btnEqual_pressed();
+    void on_btnEqual_released();
 
     // 清除所有字符
-    void on_btnClear_pressed();
+    void on_btnClear_released();
 
     // 删除一个字符
-    void on_btnBack_pressed();
+    void on_btnBack_released();
 
     // 设置正负
-    void on_btnNegative_pressed();
+    void on_btnNegative_released();
 
     // 显示历史记录界面
-    void on_btnHistory_pressed();
+    void on_btnHistory_released();
 
     // 点击历史记录条项
     void on_listWidget_itemPressed(QListWidgetItem *item);
 
     // 清除历史记录
-    void on_btnClearData_pressed();
+    void on_btnClearData_released();
 
     // 实时显示表达式结果
     void resultDisplay(const QString &text);
@@ -51,6 +51,8 @@ private:
 
 private:
 
+    int press_y = 0;    // 按压时的坐标
+    int release_y = 0;  // 释放时的坐标
     bool isResult = false;      // 判断lineEdit显示的内容是否为表达式求值结果
 };
 #endif // WIDGET_H

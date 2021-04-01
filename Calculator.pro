@@ -13,10 +13,12 @@ lessThan(QT_VERSION, 6): QT += androidextras
 SOURCES += \
     calculate.cpp \
     main.cpp \
+    qanimationstackedwidget.cpp \
     widget.cpp
 
 HEADERS += \
     calculate.h \
+    qanimationstackedwidget.h \
     widget.h
 
 FORMS += \

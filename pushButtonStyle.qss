@@ -21,7 +21,7 @@ QPushButton#btnClearData:hover {
 QPushButton#btnDivide, QPushButton#btnMultiply, QPushButton#btnSubtract, 
 QPushButton#btnAdd, QPushButton#btnNegative, QPushButton#btnRight,
 QPushButton#btnLeft {
-    color: #3aba95;
+    color: #ad98d7;
 }
 QPushButton#btnEqual {
     background-color: #ad98d7;
@@ -31,8 +31,8 @@ QPushButton#btnEqual:pressed,  QPushButton#btnHistory:pressed, QPushButton#btnGo
 QPushButton#btnBack:pressed {
     background-color: #71ab97;
 }
-QPushButton#btnBack, QPushButton#btnClear {
-    color: #d66d75;
+QPushButton#btnClear {
+    color: #71ab97;
 }
 QPushButton#btnClearData {
     background-color:  #f5b8bf;
@@ -60,10 +60,6 @@ QLineEdit#lineEdit {
     border-radius: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
-}
-.QListWidget::item:selected {
-    background-color: #ad98d7;
-    border: none;
 }
 QListView {
     outline: none;

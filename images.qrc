@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/btnIcon">
         <file>android_sources/images/history.png</file>
+        <file>android_sources/images/lg.png</file>
+        <file>android_sources/images/xy.png</file>
     </qresource>
     <qresource prefix="/">
         <file>android_sources/images/delete.png</file>

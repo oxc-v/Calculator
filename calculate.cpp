@@ -1,6 +1,7 @@
 #include "calculate.h"
 
 #include <QStack>
+#include <QtMath>
 
 // 参数构造函数
 Calculate::Calculate(const QString expression)
@@ -45,6 +46,8 @@ bool Calculate::isOperator(int type)
     case 2:
     case 3:
     case 4:
+    case 11:
+    case 12:
         return true;
     default:
         return false;
@@ -65,6 +68,9 @@ int Calculate::compareOperator(int type)
     case 3:
     case 4:
         return 2;
+    case 11:
+    case 12:
+        return 3;
     default:
         return 0;
     }
@@ -79,7 +85,7 @@ void Calculate::wordAnalysis(QVector<QPair<QString, int>> &words, const QString 
         // 提取运算符
         if (expr.at(i) == '-' || expr.at(i) == '+' || expr.at(i) == '*' ||
             expr.at(i) == '/' || expr.at(i) == '(' || expr.at(i) == ')' ||
-            expr.at(i) == '%') {
+            expr.at(i) == '%' || expr.at(i) == '^') {
 
             // 将QChar转换成QString类型存储
             QString strTmp;
@@ -128,6 +134,11 @@ void Calculate::wordAnalysis(QVector<QPair<QString, int>> &words, const QString 
             case '%':
                 // 匹配%
                 words.push_back(qMakePair(strTmp, 10));
+                break;
+
+            case '^':
+                // 匹配^
+                words.push_back(qMakePair(strTmp, 12));
                 break;
 
             default:
@@ -190,6 +201,11 @@ void Calculate::wordAnalysis(QVector<QPair<QString, int>> &words, const QString 
             // 上面的while循环多扫描了一个字符
             i--;
 
+        } else if (expr.at(i) == 'l') {
+
+            words.push_back(qMakePair(QString("lg"), 11));
+            i++;
+
         } else {
 
             // 以.开头，单词错误
@@ -209,7 +225,7 @@ void Calculate::Next()
         type = 0;
 }
 
-// expr → term | @term | #term {+term | -term}
+// expr → term | @term | #term {+term | -term | ^term}
 void Calculate::expr()
 {
     if (type == 8 || type == 9) {
@@ -218,7 +234,7 @@ void Calculate::expr()
     } else {
         term();
     }
-    while (type == 1 || type == 2) {
+    while (type == 1 || type == 2 || type == 12) {
         Next();
         term();
     }
@@ -234,7 +250,7 @@ void Calculate::term()
     }
 }
 
-// factor → (expr) | digit {%}
+// factor → (expr) | lg expr | digit {%}
 void Calculate::factor()
 {
     if (type == 7) {
@@ -254,6 +270,9 @@ void Calculate::factor()
 
             grammerError = true;    // 表达式的语法有误  
         }
+    } else if (type == 11) {
+        Next();
+        expr();
     } else {
 
             grammerError = true;    // 表达式的语法有误
@@ -390,6 +409,15 @@ double Calculate::exprToCalculate(const QVector<QPair<QString, int>> &suffixExpr
             }
             // while循环多扫描了一个字符
             i--;
+            break;
+
+        case 11:
+            output.push(qLn(output.pop()) / qLn(10));
+            break;
+
+        case 12:
+            popTwoNumbers(output, first, second);
+            output.push(qPow(second, first));
             break;
 
         default:

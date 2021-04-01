@@ -3,6 +3,8 @@
 #include "calculate.h"
 
 #include <QFile>
+#include <QPropertyAnimation>
+#include <QGestureEvent>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -17,6 +19,8 @@ Widget::Widget(QWidget *parent)
 #ifdef Q_OS_ANDROID
     ui->btnHistory->setIconSize(QSize(128, 128));
     ui->btnBack->setIconSize(QSize(128, 128));
+    ui->btnLg->setIconSize(QSize(128, 128));
+    ui->btnQu->setIconSize(QSize(128, 128));
 #endif
     // 加载qss样式表
     QFile file(":/myStyle/pushButtonStyle.qss");
@@ -25,24 +29,26 @@ Widget::Widget(QWidget *parent)
     qApp->setStyleSheet(styleSheet);
 
     // 连接信号和槽函数
-    connect(ui->btn0, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btn1, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btn2, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btn3, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btn4, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btn5, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btn6, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btn7, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btn8, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btn9, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btnDivide, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btnMultiply, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btnSubtract, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btnAdd, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btnLeft, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btnRight, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btnPoint, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
-    connect(ui->btnPrecent, SIGNAL(pressed()), this, SLOT(on_btnClicked()));
+    connect(ui->btn0, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btn1, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btn2, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btn3, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btn4, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btn5, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btn6, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btn7, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btn8, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btn9, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btnDivide, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btnMultiply, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btnSubtract, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btnAdd, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btnLeft, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btnRight, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btnPoint, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btnPrecent, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btnLg, SIGNAL(released()), this, SLOT(on_btnClicked()));
+    connect(ui->btnQu, SIGNAL(released()), this, SLOT(on_btnClicked()));
     connect(ui->lineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(resultDisplay(const QString &)));
 }
 
@@ -68,14 +74,38 @@ void Widget::on_btnClicked()
     }
 
     // 将button的text显示在lineEdit上
-    ui->lineEdit->insert(btn->text());
+    if (btn == ui->btnQu) {
+
+        ui->lineEdit->insert("^");
+
+    } else if (btn == ui->btnLg) {
+
+        ui->lineEdit->insert("lg");
+
+    } else {
+
+        ui->lineEdit->insert(btn->text());
+    }
 }
 
 // 计算表达式
-void Widget::on_btnEqual_pressed()
+void Widget::on_btnEqual_released()
 {
+    // 将表达式中的中文字符替换成计算机能识别的操作符
+    QString s = ui->lineEdit->text();
+    QStringList list = s.split(QString());
+    QString expr;
+    foreach (QString str, list) {
+        if (str == "÷")
+            expr += "/";
+        else if (str == "×")
+            expr += "*";
+        else
+            expr += str;
+    }
+
     // 解析表达式
-    Calculate ca = Calculate(ui->lineEdit->text());
+    Calculate ca = Calculate(expr);
 
     // 清除lineOutput的内容
     ui->lineOutput->clear();
@@ -103,7 +133,7 @@ void Widget::on_btnEqual_pressed()
 }
 
 // 清除所有字符
-void Widget::on_btnClear_pressed()
+void Widget::on_btnClear_released()
 {
     // 清除lineOutput和lineEdit的内容
     ui->lineEdit->clear();
@@ -111,13 +141,13 @@ void Widget::on_btnClear_pressed()
 }
 
 // 删除一个字符
-void Widget::on_btnBack_pressed()
+void Widget::on_btnBack_released()
 {
     ui->lineEdit->backspace();
 }
 
 // 设置正负
-void Widget::on_btnNegative_pressed()    // 有bug
+void Widget::on_btnNegative_released()    // 有bug
 {
     // 判断一个字符是否为数字
     bool digit = false;
@@ -172,19 +202,22 @@ void Widget::on_btnNegative_pressed()    // 有bug
 }
 
 // 显示历史记录界面
-void Widget::on_btnHistory_pressed()
+void Widget::on_btnHistory_released()
 {
+    ui->stackedWidget->setDuration(400);
+    ui->stackedWidget->setEasingCurve(QEasingCurve::InOutBack);
+
     // 获取当前页面索引
     int index = ui->stackedWidget->currentIndex();
 
     // 切换页面和图标
     if (index == 0) {
         ui->btnHistory->setIcon(QIcon("://android_sources/images/goBack.png"));
-        ui->stackedWidget->setCurrentIndex(1);
+        ui->stackedWidget->slideRight();
     }
     else {
         ui->btnHistory->setIcon(QIcon(":/btnIcon/android_sources/images/history.png"));
-        ui->stackedWidget->setCurrentIndex(0);
+        ui->stackedWidget->slideLeft();
     }
 }
 
@@ -215,7 +248,7 @@ void Widget::on_listWidget_itemPressed(QListWidgetItem *item)
 }
 
 // 清除历史记录
-void Widget::on_btnClearData_pressed()
+void Widget::on_btnClearData_released()
 {
     ui->listWidget->clear();
 }
@@ -226,10 +259,23 @@ void Widget::resultDisplay(const QString &text)
 
     ui->lineOutput->clear();
 
+    // 将表达式中的中文字符替换成计算机能识别的操作符
+    QString s = text;
+    QStringList list = s.split(QString());
+    QString expr;
+    foreach (QString str, list) {
+        if (str == "÷")
+            expr += "/";
+        else if (str == "×")
+            expr += "*";
+        else
+            expr += str;
+    }
+
     // 如果lineEdit的内容不是空的并且不是表达式的结果
     if (!isResult && !text.isEmpty()) {
 
-        Calculate tmp = Calculate(text);
+        Calculate tmp = Calculate(expr);
         if (!tmp.correct) {
 
             ui->lineOutput->setText("Error");

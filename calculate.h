@@ -18,6 +18,8 @@
  * |@(负号) 8 |
  * |#(正号) 9 |
  * |%(百分号) 10 |
+ * |lg     11|
+ * |^      12|
  * |blank  0 |
  */
 
@@ -48,9 +50,9 @@ private:
     /* 语法分析
      * -------
      * 算术表达式的文法表示
-     * expr → term | @term | #term {+term | -term}
+     * expr → term | @term | #term {+term | -term | ^term}
      * term → factor {*factor | /factor}
-     * factor → (expr) | digit {%}
+     * factor → (expr) | lg expr | digit {%}
      */
     void expr();
     void term();
