@@ -37,6 +37,9 @@ void QAnimationStackedWidget::paintEvent(QPaintEvent *ev)
         QRect currentRect = currentWidget->geometry();
         QRect nextRect    = nextWidget->geometry();
 
+//        currentWidget->resize(currentRect.width(), currentRect.height());
+        nextWidget->resize(nextRect.width(), nextRect.height());
+
         double value = currentValue.toDouble();
 
         // 绘制Widget

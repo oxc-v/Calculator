@@ -50,9 +50,7 @@ private:
     Ui::Widget *ui;
 
 private:
-
-    int press_y = 0;    // 按压时的坐标
-    int release_y = 0;  // 释放时的坐标
     bool isResult = false;      // 判断lineEdit显示的内容是否为表达式求值结果
+
 };
 #endif // WIDGET_H

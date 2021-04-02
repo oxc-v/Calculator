@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QPropertyAnimation>
 #include <QGestureEvent>
+#include <QDebug>
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -22,6 +23,7 @@ Widget::Widget(QWidget *parent)
     ui->btnLg->setIconSize(QSize(128, 128));
     ui->btnQu->setIconSize(QSize(128, 128));
 #endif
+
     // 加载qss样式表
     QFile file(":/myStyle/pushButtonStyle.qss");
     file.open(QFile::ReadOnly);
@@ -204,7 +206,7 @@ void Widget::on_btnNegative_released()    // 有bug
 // 显示历史记录界面
 void Widget::on_btnHistory_released()
 {
-    ui->stackedWidget->setDuration(400);
+    ui->stackedWidget->setDuration(200);
     ui->stackedWidget->setEasingCurve(QEasingCurve::InOutBack);
 
     // 获取当前页面索引
@@ -285,4 +287,3 @@ void Widget::resultDisplay(const QString &text)
         }
     }
 }
-

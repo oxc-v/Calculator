@@ -16,8 +16,11 @@ QPushButton#btnClearData:hover {
     border: none;
 }*/
 .QPushButton:pressed {
-    background-color: #ad98d7;
+    background-color: #71ab97;
 } 
+QPushButton#btnQu:pressed, QPushButton#btnLg:pressed, QPushButton#btnClear:pressed {
+    background-color: #ad98d7;
+}
 QPushButton#btnDivide, QPushButton#btnMultiply, QPushButton#btnSubtract, 
 QPushButton#btnAdd, QPushButton#btnNegative, QPushButton#btnRight,
 QPushButton#btnLeft {
@@ -27,10 +30,10 @@ QPushButton#btnEqual {
     background-color: #ad98d7;
     color: white;
 }
-QPushButton#btnEqual:pressed,  QPushButton#btnHistory:pressed, QPushButton#btnGoBack:pressed,
-QPushButton#btnBack:pressed {
+QPushButton#btnEqual:pressed, QPushButton#btnClearData:pressed {
     background-color: #71ab97;
 }
+
 QPushButton#btnClear {
     color: #71ab97;
 }

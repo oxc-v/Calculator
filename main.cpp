@@ -12,8 +12,8 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 #ifdef Q_OS_ANDROID
-    // 设置程序启动画面延时1秒
-    QTimer::singleShot(1000,NULL,[=](){
+    // 设置程序启动画面延时2秒
+    QTimer::singleShot(2000,NULL,[=](){
         QtAndroid::hideSplashScreen(500);
     });
 #endif
