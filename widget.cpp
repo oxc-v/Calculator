@@ -16,14 +16,6 @@ Widget::Widget(QWidget *parent)
     // 显示计算页面
     ui->stackedWidget->setCurrentIndex(0);
 
-    // 设置图标大小
-#ifdef Q_OS_ANDROID
-    ui->btnHistory->setIconSize(QSize(128, 128));
-    ui->btnBack->setIconSize(QSize(128, 128));
-    ui->btnLg->setIconSize(QSize(128, 128));
-    ui->btnQu->setIconSize(QSize(128, 128));
-#endif
-
     // 加载qss样式表
     QFile file(":/myStyle/pushButtonStyle.qss");
     file.open(QFile::ReadOnly);
