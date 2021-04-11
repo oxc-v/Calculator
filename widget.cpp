@@ -74,7 +74,7 @@ void Widget::on_btnClicked()
 
     } else if (btn == ui->btnLg) {
 
-        ui->lineEdit->insert("lg");
+        ui->lineEdit->insert("lg(");
 
     } else {
 
@@ -138,6 +138,13 @@ void Widget::on_btnClear_released()
 void Widget::on_btnBack_released()
 {
     ui->lineEdit->backspace();
+
+    // 如果是lg，则清除lg(
+    QString txt = ui->lineEdit->text();
+    if (txt.at(txt.size() - 1) == 'g') {
+        ui->lineEdit->backspace();
+        ui->lineEdit->backspace();
+    }
 }
 
 // 设置正负
